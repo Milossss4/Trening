@@ -1,10 +1,10 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -19,15 +19,17 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Powiadomienia',
+          tabBarIcon: ({ focused }) => focused ? <Ionicons name="notifications" size={24} color="#89CFF0" /> : <Ionicons name="notifications-outline" size={24} color="white" />,
+          tabBarActiveTintColor: '#89CFF0',
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Historia',
+          tabBarIcon: ({ focused }) => focused ? <Ionicons name="calendar-clear" size={24} color="#89CFF0" /> : <Ionicons name="calendar-clear-outline" size={24} color="white" />,
+          tabBarActiveTintColor: '#89CFF0',
         }}
       />
     </Tabs>
