@@ -1,4 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -25,10 +26,10 @@ export default function History() {
   }
 
   const handleSave = async () => {
-    if (nazwaGrupy.trim() === '') return; 
-    
+    if (nazwaGrupy.trim() === '') return;
+
     await addGrupa(nazwaGrupy);
-    setNazwaGrupy(''); 
+    setNazwaGrupy('');
     setModalVisible(false);
   }
 
@@ -44,23 +45,21 @@ export default function History() {
       </View>
 
       <ScrollView style={styles.scrollView}>
-        {/* Przechodzimy pętlą po wszystkich grupach */}
         {grupy.map((grupa) => (
-          <TouchableOpacity 
-            key={grupa.id} 
+          <TouchableOpacity
+            key={grupa.id}
             style={styles.groupCard}
             activeOpacity={0.7}
-            // W przyszłości dodasz tu nawigację do ćwiczeń w tej grupie
-            onPress={() => console.log('Kliknięto grupę:', grupa.nazwa)} 
+            onPress={() => router.push({
+              pathname: '/grupa/[id]',
+              params: { id: grupa.id, nazwa: grupa.nazwa }
+            } as any)}
           >
             <Text style={styles.groupNameText}>{grupa.nazwa}</Text>
-            
-            {/* Strzałka sugerująca, że w środku jest coś więcej */}
             <Ionicons name="chevron-forward" size={24} color="#89CFF0" />
           </TouchableOpacity>
         ))}
-        
-        {/* Komunikat, gdy lista jest pusta */}
+
         {grupy.length === 0 && (
           <Text style={styles.emptyListText}>
             Brak grup treningowych. Dodaj pierwszą klikając +
@@ -69,9 +68,9 @@ export default function History() {
       </ScrollView>
 
       <View style={styles.addButtonView}>
-        <TouchableOpacity 
-        style={styles.addButton}
-        onPress={() => setModalVisible(true)}
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => setModalVisible(true)}
         >
           <Ionicons name="add" size={30} color="black" />
         </TouchableOpacity>
@@ -84,7 +83,7 @@ export default function History() {
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(false);
-          setNazwaGrupy(''); 
+          setNazwaGrupy('');
         }}
       >
         <View style={styles.modalOverlay}>
@@ -94,7 +93,7 @@ export default function History() {
               style={styles.textInput}
               value={nazwaGrupy}
               onChangeText={setNazwaGrupy}
-              autoFocus={true} 
+              autoFocus={true}
             />
 
             <View style={styles.buttonRow}>
@@ -126,27 +125,27 @@ export default function History() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121417', // Ciemne tło główne
+    backgroundColor: '#121417',
     paddingTop: 60,
   },
-  
+
   tittleView: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start', // Zmienione z center, żeby tytuł był z lewej strony
-    paddingHorizontal: 20, // Wyrównanie do lewej krawędzi kafelków
-    marginBottom: 20, // Odstęp od listy
+    justifyContent: 'flex-start',
+    paddingHorizontal: 20,
+    marginBottom: 20,
   },
 
   tittleText: {
-    fontSize: 28, // Lekko powiększony, żeby wyglądał jak główny nagłówek
+    fontSize: 28,
     fontWeight: 'bold',
     color: 'white',
   },
 
   addButtonView: {
     paddingHorizontal: 20,
-    paddingTop: 20, // Zmniejszyłem trochę górny padding
+    paddingTop: 20,
     paddingBottom: 40,
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -154,13 +153,12 @@ const styles = StyleSheet.create({
 
   addButton: {
     backgroundColor: '#89CFF0',
-    width: 60, // Lekko powiększony przycisk
+    width: 60,
     height: 60,
-    borderRadius: 30, // Idealne koło
+    borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    // Dodanie lekkiego cienia do przycisku dodawania (dla głębi)
-    elevation: 5, 
+    elevation: 5,
     shadowColor: '#89CFF0',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -168,20 +166,20 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    flex: 1, // BARDZO WAŻNE: pozwala liście zająć całe wolne miejsce
-    backgroundColor: 'transparent', // Zmienione z 'white', żeby nie psuło ciemnego tła
+    flex: 1,
+    backgroundColor: 'transparent',
   },
 
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)', 
-    justifyContent: 'center', 
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 
   modalContent: {
-    width: '85%', 
-    backgroundColor: '#2A2E35', 
+    width: '85%',
+    backgroundColor: '#2A2E35',
     borderRadius: 20,
     padding: 25,
     alignItems: 'center',
@@ -198,14 +196,14 @@ const styles = StyleSheet.create({
 
   textInput: {
     width: '100%',
-    backgroundColor: '#1E2126', 
+    backgroundColor: '#1E2126',
     color: 'white',
     paddingHorizontal: 15,
     paddingVertical: 12,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#3F444D', 
-    marginBottom: 25, 
+    borderColor: '#3F444D',
+    marginBottom: 25,
   },
 
   buttonRow: {
@@ -215,7 +213,7 @@ const styles = StyleSheet.create({
   },
 
   closeButton: {
-    flex: 1, 
+    flex: 1,
     backgroundColor: 'transparent',
     paddingVertical: 12,
     borderRadius: 10,
@@ -231,7 +229,7 @@ const styles = StyleSheet.create({
   },
 
   saveButton: {
-    flex: 1, 
+    flex: 1,
     backgroundColor: '#89CFF0',
     paddingVertical: 12,
     borderRadius: 10,
@@ -245,13 +243,13 @@ const styles = StyleSheet.create({
   },
 
   groupCard: {
-    backgroundColor: '#2A2E35', 
+    backgroundColor: '#2A2E35',
     flexDirection: 'row',
-    justifyContent: 'space-between', 
-    alignItems: 'center', 
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 20,
     marginHorizontal: 20,
-    marginBottom: 15, 
+    marginBottom: 15,
     borderRadius: 15,
   },
 
@@ -260,7 +258,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  
+
   emptyListText: {
     color: '#888',
     textAlign: 'center',
