@@ -7,6 +7,7 @@ import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View 
 interface Grupa {
   id: number;
   nazwa: string;
+  serie: number; 
 }
 
 export default function History() {
@@ -24,11 +25,6 @@ export default function History() {
 
   const addGrupa = async (nazwa: string) => {
     await db.runAsync('INSERT INTO grupy_treningowe (nazwa) VALUES (?)', nazwa);
-    await fetchGrupy();
-  }
-
-  const deleteGrupa = async (id: number) => {
-    await db.runAsync('DELETE FROM grupy_treningowe WHERE id = ?', id);
     await fetchGrupy();
   }
 

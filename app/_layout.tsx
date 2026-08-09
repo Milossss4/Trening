@@ -15,18 +15,18 @@ async function openDatabase(db: SQLiteDatabase) {
 
     CREATE TABLE IF NOT EXISTS grupy_treningowe (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nazwa TEXT NOT NULL
+      nazwa TEXT NOT NULL,
+      serie INTEGER DEFAULT 0
     );
     
     CREATE TABLE IF NOT EXISTS cwiczenia (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       grupa_id INTEGER,
       nazwa TEXT NOT NULL,
-      serie INTEGER,
-      powtorzenia INTEGER,
+      powtorzenia INTEGER DEFAULT 0,
       FOREIGN KEY (grupa_id) REFERENCES grupy_treningowe (id) ON DELETE CASCADE
     );
-  `)
+  `);
 }
 
 
@@ -34,7 +34,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <SQLiteProvider databaseName="treningi.db" onInit={openDatabase}>
+    <SQLiteProvider databaseName="treningi4.db" onInit={openDatabase}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
